@@ -1,0 +1,212 @@
+/******************************************************************************
+
+                              Online C++ Compiler.
+               Code, Compile, Run and Debug C++ program online.
+Write your code in this editor and press "Run" button to compile and execute it.
+
+*******************************************************************************/
+
+#include <iostream>
+#include <vector>
+#include <string>
+using namespace std;
+
+class Student {
+private:
+    int rollno;
+    int age;
+    string name;
+
+public:
+    Student(int stdRollno, int stdAge, string stdName) : rollno(stdRollno), age(stdAge), name(stdName) {}
+
+    void setRollno(int stdRollno) {
+        rollno = stdRollno;
+    }
+
+    void setName(const string& stdName) {
+        name = stdName;
+    }
+
+    void setAge(int stdAge) {
+        age = stdAge;
+    }
+
+    int getRollno() const {
+        return rollno;
+    }
+
+    const string& getName() const {
+        return name;
+    }
+
+    int getAge() const {
+        return age;
+    }
+
+    void displayStudent() const {
+        cout << "\t\tRoll no: " << rollno << endl;
+        cout << "\t\tName   : " << name << endl;
+        cout << "\t\tAge    : " << age << endl;
+    }
+};
+
+void searchStudent(const vector<Student>& students) {
+    int rollno;
+    cout << "\t\tEnter Roll no. : ";
+    cin >> rollno;
+
+    for (const Student& student : students) {
+        if (student.getRollno() == rollno) {
+            cout << "------Student Found------" << endl;
+            student.displayStudent();
+            return;
+        }
+    }
+
+    cout << "Student not found." << endl;
+}
+
+void displayAllStudents(const vector<Student>& students) {
+    if (students.empty()) {
+        cout << "\t\tNo students found" << endl;
+        return;
+    }
+
+    for (const Student& student : students) {
+        student.displayStudent();
+        cout << endl;
+    }
+}
+
+void updateStudent(vector<Student>& students) {
+    string name;
+    cout << "\t\tEnter name to update record: ";
+    cin.ignore();
+    getline(cin, name);
+
+    for (Student& student : students) {
+        if (student.getName() == name) {
+            cout << "\t\t-----Student found----" << endl;
+            int choice;
+ 
+           cout << "1. Update Roll no" << endl;
+            cout << "2. Update Name" << endl;
+            cout << "3. Update Age" << endl;
+            cout << "Enter choice: ";
+            cin >> choice;
+
+            switch (choice) {
+                case 1: {
+                    int newRollno;
+                    cout << "Enter new roll no: ";
+                    cin >> newRollno;
+                    student.setRollno(newRollno);
+                    break;
+                }
+                case 2: {
+                    string newName;
+                    cout << "Enter new name: ";
+                    cin.ignore();
+                    getline(cin, newName);
+                    student.setName(newName);
+                    break;
+                }
+                case 3: {
+                    int newAge;
+                    cout << "Enter new age: ";
+                    cin >> newAge;
+                    student.setAge(newAge);
+                    break;
+                }
+                default:
+                    cout << "Invalid choice" << endl;
+            }
+        }
+    }
+}
+
+void deleteStudent(vector<Student>& students) {
+    string name;
+    cout << "Enter name to delete: ";
+    cin.ignore();
+    getline(cin, name);
+
+    for (auto it = students.begin(); it != students.end(); ++it) {
+        if (it->getName() == name) {
+            it = students.erase(it);
+            cout << "Student removed successfully" << endl;
+            return;
+        }
+    }
+
+    cout << "Student not found." << endl;
+}
+
+void addNewStudent(vector<Student>& students) {
+    int rollno, age;
+    string name;
+    cout << "Enter roll no: ";
+    cin >> rollno;
+
+    for (const Student& student : students) {
+        if (student.getRollno() == rollno) {
+            cout << "Student already exists" << endl;
+            return;
+        }
+    }
+
+    cout << "Enter name: ";
+    cin.ignore();
+    getline(cin, name);
+    cout << "Enter age: ";
+    cin >> age;
+
+    Student newStudent(rollno, age, name);
+    students.push_back(newStudent);
+    cout << "Student added successfully" << endl;
+}
+
+int main() {
+    vector<Student> students;
+    char choice;
+    do {
+        system("cls");
+        int op;
+        cout << "\t\t1. Add new student" << endl;
+        cout << "\t\t2. Display all students" << endl;
+        cout << "\t\t3. Search students" << endl;
+        cout << "\t\t4. Update student" << endl;
+        cout << "\t\t5. Delete student" << endl;
+        cout << "\t\t6. Exit" << endl;
+        cout << "\t\tEnter your choice: ";
+        cin >> op;
+
+        switch (op) {
+            case 1:
+                addNewStudent(students);
+                break;
+            case 2:
+                displayAllStudents(students);
+                break;
+            case 3:
+                searchStudent(students);
+                break;
+            case 4:
+                updateStudent(students);
+                break;
+            case 5:
+                deleteStudent(students);
+                break;
+            case 6:
+                return 0; // Use 'return 0' instead of 'exit(1)' to exit the program normally.
+            default:
+                cout << "\t\tInvalid choice" << endl;
+        }
+
+        cout << "\t\tDo you want to continue [yes=y/no=n]: ";
+        cin >> choice;
+    } while (choice == 'y' || choice == 'Y');
+
+    return 0;
+}
